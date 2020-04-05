@@ -3,9 +3,10 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { DB_CONFIGURATION } from './config/db.config';
+import { UsersModule } from './users/users.module';
 
 @Module({
-  imports: [TypeOrmModule.forRoot(DB_CONFIGURATION)],
+  imports: [TypeOrmModule.forRoot(DB_CONFIGURATION), UsersModule],
 
   controllers: [AppController],
   providers: [AppService],

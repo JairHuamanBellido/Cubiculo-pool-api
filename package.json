@@ -29,6 +29,7 @@
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.2",
     "rxjs": "^6.5.4",
+    "dotenv": "^8.2.0",
     "typeorm": "^0.2.24"
   },
   "devDependencies": {
@@ -41,7 +42,6 @@
     "@types/supertest": "^2.0.8",
     "@typescript-eslint/eslint-plugin": "^2.23.0",
     "@typescript-eslint/parser": "^2.23.0",
-    "dotenv": "^8.2.0",
     "eslint": "^6.8.0",
     "eslint-config-prettier": "^6.10.0",
     "eslint-plugin-import": "^2.20.1",
