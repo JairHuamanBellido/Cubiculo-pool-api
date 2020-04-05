@@ -1,8 +1,8 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { UsersService } from './users.service';
+import { UsersService } from '../services/users.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { DB_CONFIGURATION } from '../config/db.config';
-import { User } from './entity/user.entity';
+import { DB_CONFIGURATION } from '../../../config/db.config';
+import { User } from '../../../entity/user.entity';
 
 describe('UsersService', () => {
   let service: UsersService;

@@ -1,9 +1,9 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { UsersController } from './users.controller';
-import { UsersService } from './users.service';
+import { UsersController } from '../controller/users.controller';
+import { UsersService } from '../services/users.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { DB_CONFIGURATION } from '../config/db.config';
-import { User } from './entity/user.entity';
+import { DB_CONFIGURATION } from '../../../config/db.config';
+import { User } from '../../../entity/user.entity';
 
 describe('Users Controller', () => {
   let controller: UsersController;

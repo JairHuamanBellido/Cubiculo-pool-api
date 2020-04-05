@@ -11,6 +11,12 @@ export class User {
   code:string;
   
   @Column()
-  name:string
+  name:string;
+
+  @Column()
+  lastName:string;
+  
+  @Column()
+  password:string;
 
 }
