@@ -1,6 +1,9 @@
 import {  config} from "dotenv";
 import { User } from "../entity/user.entity";
 import { ConnectionOptions } from "typeorm";
+import { Reserva } from "../entity/reserva.entity";
+import { Cubiculo } from "../entity/cubiculo.entity";
+import { UserManyReserva } from "../entity/userManyReservas.entity";
 config();
  const DB_CONFIGURATION :ConnectionOptions = {
     type: "postgres",
@@ -9,7 +12,7 @@ config();
     username: process.env.DATABASE_USERNAME,
     password: process.env.DATABASE_PASSWORD,
     database: process.env.DATABASE_NAME,
-    entities: [User],
+    entities: [User, Reserva,Cubiculo,UserManyReserva],
     synchronize: false,
     logging: true,
     migrationsRun:true,
