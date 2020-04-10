@@ -1,13 +1,12 @@
-import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
+import { Entity, Column,  PrimaryColumn } from 'typeorm';
 
 
 @Entity()
 export class User {
-  @PrimaryGeneratedColumn('rowid')
-    id: number;
 
 
-  @Column()
+
+  @PrimaryColumn()
   code:string;
   
   @Column()
@@ -18,5 +17,7 @@ export class User {
   
   @Column()
   password:string;
+
+
 
 }
