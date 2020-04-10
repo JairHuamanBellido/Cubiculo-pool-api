@@ -25,7 +25,7 @@ export class UsersService {
             const newUser = await this.userRepository.create({
                 code: _newUser.code,
                 lastName: _newUser.lastName,
-                name: _newUser.name,
+                nombre: _newUser.name,
                 password: AES.encrypt(_newUser.password,secretKey).toString()
             });
             await this.userRepository.save(newUser);    

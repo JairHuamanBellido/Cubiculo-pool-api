@@ -11,7 +11,7 @@ export class CreateAuthResponseDTO{
     @ApiProperty()
     code:string;
     constructor(user:User){
-        this.name  = user.name;
+        this.name  = user.nombre;
         this.lastName =  user.lastName,
         this.code =  user.code;
     }
