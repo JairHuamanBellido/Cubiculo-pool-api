@@ -7,13 +7,13 @@ export class User {
 
 
   @PrimaryColumn()
-  code:string;
+  codigo:string;
   
   @Column()
-  nombre:string;
+  nombres:string;
 
   @Column()
-  lastName:string;
+  apellidos:string;
   
   @Column()
   password:string;
