@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from '../../../entity/user.entity';
 import { Repository } from 'typeorm';
@@ -18,8 +18,8 @@ export class UsersService {
 
     async create(_newUser:CreateUserRequestDTO){
 
-        const isUserExist = await this.userRepository.findOne({where: {code:  _newUser.code}})
-
+        const isUserExist = await this.userRepository.findOne({where: {codigo:  _newUser.code}})
+        
         if(!isUserExist){
 
             const newUser = await this.userRepository.create({
