@@ -24,6 +24,8 @@ export class AuthService {
                 code: credentials.username,
             }
         })
+        console.log("Usuario", credentials.username)
+        console.log("Contraseña: ",AES.decrypt(authUser.password, secretKey).toString(enc.Utf8));
         if (AES.decrypt(authUser.password, secretKey).toString(enc.Utf8) === credentials.password) {
 
             return new CreateAuthResponseDTO( authUser);
