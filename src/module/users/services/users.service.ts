@@ -17,7 +17,7 @@ export class UsersService {
 
 
     async create(_newUser:CreateUserRequestDTO){
-
+        
         const isUserExist = await this.userRepository.findOne({where: {codigo:  _newUser.code}})
         
         if(!isUserExist){

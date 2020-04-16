@@ -16,7 +16,7 @@ export class AuthController {
 
     @Post()
     async authenication(@Res() res:Response, @Body() credentials:CreateAuthRequestDTO){
-
+        console.log(credentials);
         try {
             const foundUser = await this.authService.authenticate(credentials);
             res.json(foundUser);

@@ -20,6 +20,9 @@ export class ReservationController {
         @Query('date') date,
         @Query('startTime') startTime,
         @Query('hours') hours) {
+            console.log("date: ",date);
+            console.log("startTime",startTime);
+            console.log("hours", hours);
         try {
             const allCubicles = await this.reservarService.findCubicles(date, startTime, hours);
 
@@ -34,7 +37,7 @@ export class ReservationController {
     @ApiResponse({ description: "Registro de una reserva", status: 201 })
     @Post()
     async createReservation(@Res() res: Response, @Body() reserva: CreateReservaDTO) {
-
+        console.log(reserva);
         try {
             const response = await this.reservarService.create(reserva);
             res.json(response);

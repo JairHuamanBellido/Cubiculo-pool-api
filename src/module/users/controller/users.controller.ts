@@ -15,7 +15,7 @@ export class UsersController {
     @ApiConflictResponse({description: "Usuario ya registrado", status: 409})
     @Post()
     async create(@Res() res: Response, @Body() createUser: CreateUserRequestDTO) {
-
+        console.log(createUser);
         try {
             const user = await this.userService.create(createUser);
 
