@@ -7,8 +7,10 @@ import { UsersModule } from './module/users/users.module';
 import { AuthModule } from './module/auth/auth.module';
 import { AuthService } from './module/auth/services/auth.service';
 import { ReservationModule } from './module/reservation/reservation.module';
+import { CubiclesModule } from './module/cubicles/cubicles.module';
+
 @Module({
-  imports: [TypeOrmModule.forRoot(DB_CONFIGURATION), UsersModule, AuthModule, ReservationModule],
+  imports: [TypeOrmModule.forRoot(DB_CONFIGURATION), UsersModule, AuthModule, ReservationModule, CubiclesModule],
 
   controllers: [AppController],
   providers: [AppService, AuthService],

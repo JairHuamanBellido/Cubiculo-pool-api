@@ -3,7 +3,6 @@ import { ReservationService } from '../services/reservation.service';
 import { Response, json } from 'express';
 import { CreateReservaDTO } from '../dto/create-reserva.dto';
 import { ApiResponse } from '@nestjs/swagger';
-import { CreateCubiculoDTO } from '../dto/create-cubiculos.dto';
 
 @Controller('reservation')
 export class ReservationController {
@@ -13,25 +12,6 @@ export class ReservationController {
 
 
 
-    @Get()
-    @ApiResponse({description: "Listar todos los cubículos disponibles",status: 200, type: CreateCubiculoDTO,})
-    async findCubicles(
-        @Res() res: Response,
-        @Query('date') date,
-        @Query('startTime') startTime,
-        @Query('hours') hours) {
-            console.log("date: ",date);
-            console.log("startTime",startTime);
-            console.log("hours", hours);
-        try {
-            const allCubicles = await this.reservarService.findCubicles(date, startTime, hours);
-
-            return res.json(allCubicles);
-
-        } catch (error) {
-            res.status(404).json({ message: "No se encontraron resultados" })
-        }
-    }
 
 
     @ApiResponse({ description: "Registro de una reserva", status: 201 })

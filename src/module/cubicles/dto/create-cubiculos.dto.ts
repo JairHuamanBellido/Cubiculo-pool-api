@@ -1,4 +1,4 @@
-import { Cubiculo } from "src/entity/cubiculo.entity";
+import { Cubiculo } from "../../../entity/cubiculo.entity";
 import { ApiProperty } from "@nestjs/swagger";
 
 export class CreateCubiculoDTO{

@@ -19,19 +19,20 @@ export class AuthService {
 
     async authenticate(credentials: CreateAuthRequestDTO): Promise<CreateAuthResponseDTO | any> {
 
-        const authUser = await this.userRepository.findOneOrFail({
+
+        const authUser = await this.userRepository.findOne({
             where: {
-                code: credentials.username,
+                codigo: credentials.username,
             }
         })
+        console.log(authUser);
         console.log("Usuario", credentials.username)
-        console.log("Contraseña: ",AES.decrypt(authUser.password, secretKey).toString(enc.Utf8));
+        console.log("Contraseña: ", AES.decrypt(authUser.password, secretKey).toString(enc.Utf8));
         if (AES.decrypt(authUser.password, secretKey).toString(enc.Utf8) === credentials.password) {
 
-            return new CreateAuthResponseDTO( authUser);
+            return new CreateAuthResponseDTO(authUser);
         }
-        else
-        {
+        else {
             return ErrorEvent;
         }
     }
