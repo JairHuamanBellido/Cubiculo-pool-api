@@ -6,7 +6,7 @@ import { CreateReservaDTO } from '../dto/create-reserva.dto';
 import { Cubiculo } from '../../../entity/cubiculo.entity';
 import { User } from '../../../entity/user.entity';
 import { UserManyReserva } from "../../../entity/userManyReservas.entity";
-
+import  *  as moment from "moment";
 @Injectable()
 export class ReservationService {
 
@@ -31,8 +31,25 @@ export class ReservationService {
 
 
         try {
+            /**
+             *  Entrada de los tiempos del body -> hh:mm (16:00)
+             *  La variable creada acontinuaciòn parsea el tiempo a formato UTC
+             *  aaaa-mm-ddThh:mm:mil
+             * 
+             * Ejemplo: 16:00 el dia 2020-04-15    -->  2020-04-15T16:00:00
+             * 
+             */
 
             
+            const UTC_StartTime = `${_reserva.fecha}T${_reserva.hora_inicio}:00`;
+            
+            
+            const UTC_EndTime = `${_reserva.fecha}T${_reserva.hora_fin}:00`;            
+            
+
+            const UTC_Date = `${_reserva.fecha}T${_reserva.hora_inicio}:00`;
+            
+
             const reserva = new Reserva();
 
 
@@ -57,9 +74,9 @@ export class ReservationService {
 
             reserva.cubiculo = cubiculoTarget;
             reserva.estado = "Reservado";
-            reserva.fecha = _reserva.fecha;
-            reserva.hora_fin = _reserva.hora_fin;
-            reserva.hora_inicio = _reserva.hora_inicio;
+            reserva.fecha = new Date(UTC_Date);
+            reserva.hora_fin = new Date(UTC_EndTime);
+            reserva.hora_inicio = new Date(UTC_StartTime);
             reserva.sede = _reserva.sede;
 
             await this.reservaRepository.save(reserva);
