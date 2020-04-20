@@ -23,6 +23,17 @@ export class CubiclesService {
 
     async findCubicles(_date: any, _startTime: any, _hours: number): Promise<CreateCubiculoDTO[]> {
 
+    
+        let timeToReservation  =" "
+        if(_date === "Hoy"){
+            _date = moment().format('YYYY-MM-DD')
+
+            timeToReservation = "Hoy"
+        }
+        else if(_date === "Mañana"){
+            _date = moment().add(1,"days").format("YYYY-MM-DD")
+            timeToReservation =  "Mañana"
+        }
 
         const startTime = moment().utc().format(`${_date}T${_startTime}:00`);
 
@@ -68,8 +79,10 @@ export class CubiclesService {
          * true: mañana
          * false: hoy
          */
-        const dayState = moment().isBefore(startTime);
-
+        const dayState = moment().isBefore(endTime);
+        
+        console.log(dayState);
+        console.log(startTime);
 
         /**
          * Rellenando datos al DTO
@@ -78,11 +91,13 @@ export class CubiclesService {
             createCubiculosDTO.push({
                 id: e.id,
                 name: e.nombre,
-                day: (dayState) ? "Mañana" : "Hoy",
+                day: timeToReservation,
                 startTime: addPMorAM(moment(startTime).get("hours")),
                 endTime: addPMorAM(endHour),
             })
         })
+
+        console.log(cubiculos.length);
 
 
         return createCubiculosDTO;
