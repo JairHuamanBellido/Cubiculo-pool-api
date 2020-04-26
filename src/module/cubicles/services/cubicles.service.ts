@@ -81,8 +81,7 @@ export class CubiclesService {
          */
         const dayState = moment().isBefore(endTime);
         
-        console.log(dayState);
-        console.log(startTime);
+
 
         /**
          * Rellenando datos al DTO
@@ -97,7 +96,6 @@ export class CubiclesService {
             })
         })
 
-        console.log(cubiculos.length);
 
 
         return createCubiculosDTO;

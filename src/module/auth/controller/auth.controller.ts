@@ -1,4 +1,4 @@
-import { Controller, Post, Res, Body, HttpException, Get } from '@nestjs/common';
+import { Controller, Post, Res, Body, HttpException, Get, Logger } from '@nestjs/common';
 import { AuthService } from '../services/auth.service';
 import { CreateAuthRequestDTO } from '../dto/createAuthRequest.dto';
 import { Response } from 'express';
@@ -16,12 +16,16 @@ export class AuthController {
 
     @Post()
     async authenication(@Res() res:Response, @Body() credentials:CreateAuthRequestDTO){
-        console.log(credentials);
+
+        Logger.log(`${credentials.username} esta intentando loguearse`, "Authentication Activity")
         try {
             const foundUser = await this.authService.authenticate(credentials);
             res.json(foundUser);
+
+            Logger.log(`${credentials} se ha autenticado correctamente`,'Authentication Acitivty')
             
         } catch (error) {
+            Logger.error(`${credentials} no ingresó sus credenciales correctamente`)
             res.status(404).json({"message": "Credenciales invàlidas"})
         }
 

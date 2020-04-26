@@ -1,4 +1,4 @@
-import { Controller, Get, Res, Query } from '@nestjs/common';
+import { Controller, Get, Res, Query, Logger } from '@nestjs/common';
 import { Response } from 'express';
 import { CubiclesService } from '../services/cubicles.service';
 import { ApiResponse, ApiQuery } from '@nestjs/swagger';
@@ -20,11 +20,18 @@ export class CubiclesController {
         @Query('startTime') startTime,
         @Query('hours') hours) {
 
-        try {
+
+            Logger.log(`Buscando cubìculos`, 'Cubicle Activity')
+        try {   
             const allCUbiculesAvailable = await this.cubiclesServices.findCubicles(date, startTime, hours);
 
+            Logger.log(`Ha encontrado ${allCUbiculesAvailable.length} cubìculos`, 'Cubicle Activity')
             res.json(allCUbiculesAvailable);
+
+            
         } catch (error) {
+            Logger.error(`Erro de servidor al buscar cubìculos`, 'Cubicle Activity')
+
             res.status(501).json({ message: "Error en el servidor" })
         }
 

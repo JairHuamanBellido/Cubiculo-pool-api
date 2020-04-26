@@ -4,6 +4,8 @@ import { UsersService } from '../services/users.service';
 import { CreateUserRequestDTO } from '../dto/createUserRequest.dto';
 import { ApiResponse, ApiConflictResponse, ApiProperty, ApiQuery, ApiParam } from '@nestjs/swagger';
 import { UserHoursAvailableDTO } from '../dto/createHoursAvailableUser.dto';
+import { UserReservationsAvailables } from '../dto/createUserReservationsAvailables.dto';
+import { UserHistoryReservations } from '../dto/createUserHistoryReservation.dto';
 
 @Controller('users')
 export class UsersController {
@@ -17,10 +19,8 @@ export class UsersController {
     @Post()
     async create(@Res() res: Response, @Body() createUser: CreateUserRequestDTO) {
 
-        Logger.debug(createUser);
         try {
             const user = await this.userService.create(createUser);
-
             res.json(user)
         } catch (error) {
             res.status(409).json({ message: "Usuario ya existe" })
@@ -58,6 +58,9 @@ export class UsersController {
     }
 
 
+    @ApiResponse({description: "Busca todas las reservas disponibles o historial", status: 200, type: UserReservationsAvailables || UserHistoryReservations})
+    @ApiQuery({required: false, name:'availables', description: "true"})
+    @ApiParam({required:true, name:'id', description: 'u201413797'})
     @Get(':id/reservations')
     async findAllReservationsByStudent(
         @Res() res:Response,
@@ -67,11 +70,14 @@ export class UsersController {
 
 
         if(availables){
+            Logger.log(`${id} esta solicitando sus reservas activas`, "Busqueda de horas disponibles");
 
             const result =  await this.userService.findAllReservationsAvailableByStudent(id);
             res.json(result);
         }
         else{
+            Logger.log(`${id} esta solicitando su historial de reservas`, "Busqueda de horas disponibles");
+
             const result =  await this.userService.findAllReservations(id);
             res.json(result)
         }
