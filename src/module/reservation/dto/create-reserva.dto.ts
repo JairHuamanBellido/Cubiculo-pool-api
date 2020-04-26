@@ -6,15 +6,15 @@ export class CreateReservaDTO{
 
     @ApiProperty()
     @IsNotEmpty()
-    fecha:Date;
+    fecha:string;
 
     @IsNotEmpty()
     @ApiProperty()
-    hora_inicio:Date;
+    hora_inicio:string;
     
     @IsNotEmpty()
     @ApiProperty()
-    hora_fin:Date;
+    hora_fin:string;
     
     @IsNotEmpty()
     @ApiProperty()
