@@ -57,4 +57,26 @@ export class UsersController {
 
     }
 
+
+    @Get(':id/reservations')
+    async findAllReservationsByStudent(
+        @Res() res:Response,
+        @Param('id')id:string,
+        @Query('availables') availables:boolean
+    ){
+
+
+        if(availables){
+
+            const result =  await this.userService.findAllReservationsAvailableByStudent(id);
+            res.json(result);
+        }
+        else{
+            const result =  await this.userService.findAllReservations(id);
+            res.json(result)
+        }
+
+        
+    }
+
 }
