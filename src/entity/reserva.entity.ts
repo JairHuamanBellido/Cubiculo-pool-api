@@ -12,7 +12,7 @@ export class Reserva{
     @ManyToOne(type =>Cubiculo ,  cubiculo=>cubiculo.id)
     cubiculo:Cubiculo
 
-    @Column()
+    @Column("date")
     fecha:Date
 
     @Column()

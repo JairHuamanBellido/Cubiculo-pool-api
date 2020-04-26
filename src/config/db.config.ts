@@ -14,7 +14,7 @@ config();
     database: process.env.DATABASE_NAME,
     entities: [User, Reserva,Cubiculo,UserManyReserva],
     synchronize: false,
-    logging: true,
+    logging: false,
     migrationsRun:true,
     migrationsTableName: 'migration',
     migrations: ['dist/migrations/*.js'],
