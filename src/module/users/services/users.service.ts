@@ -74,11 +74,13 @@ export class UsersService {
 
 
         const createCubiculosDTO: UserReservationsAvailables[] = [];
+        
+        
 
-        userManyReserva.forEach((e, index) => {
+
+        userManyReserva.forEach((e) => {
             reserva.forEach((j) => {
-                if (reserva[index] && j.id === e.reserva.id) {
-
+                if ( j.id === e.reserva.id) {
 
                     createCubiculosDTO.push({
                         id: j.id,
