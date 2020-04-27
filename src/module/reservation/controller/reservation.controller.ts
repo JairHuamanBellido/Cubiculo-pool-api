@@ -1,8 +1,9 @@
-import { Controller, Post, Res, Body, Get, Query, Logger } from '@nestjs/common';
+import { Controller, Post, Res, Body, Get,  Logger, Param } from '@nestjs/common';
 import { ReservationService } from '../services/reservation.service';
-import { Response, json } from 'express';
+import { Response } from 'express';
 import { CreateReservaDTO } from '../dto/create-reserva.dto';
 import { ApiResponse } from '@nestjs/swagger';
+import { ReservaDetailDTO } from '../dto/create-reservaDetail.dto';
 
 @Controller('reservation')
 export class ReservationController {
@@ -26,5 +27,17 @@ export class ReservationController {
             res.status(500).json({ message: "Hubo un error al reservar" })
             Logger.error(`Hubo error al reservar`,'Reservation Activity')
         }
+    }
+    
+
+    @ApiResponse({description: 'Ver detalle de reserva', status: 201, type: ReservaDetailDTO})
+    @Get(":id")
+    async findReservationById(
+        @Res() res:Response,
+        @Param('id') id:string 
+    ){
+        const result =  await this.reservarService.findById(parseInt(id));
+
+        res.json(result);
     }
 }

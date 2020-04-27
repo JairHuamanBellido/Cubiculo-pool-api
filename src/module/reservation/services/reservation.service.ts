@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Reserva } from '../../../entity/reserva.entity';
 import { Repository } from 'typeorm';
@@ -6,7 +6,9 @@ import { CreateReservaDTO } from '../dto/create-reserva.dto';
 import { Cubiculo } from '../../../entity/cubiculo.entity';
 import { User } from '../../../entity/user.entity';
 import { UserManyReserva } from "../../../entity/userManyReservas.entity";
-import  *  as moment from "moment";
+import *  as moment from "moment";
+import { ReservaDetailDTO } from '../dto/create-reservaDetail.dto';
+import { addPMorAM } from '../../../utils/algorithms';
 @Injectable()
 export class ReservationService {
 
@@ -40,15 +42,15 @@ export class ReservationService {
              * 
              */
 
-            
+
             const UTC_StartTime = `${_reserva.fecha}T${_reserva.hora_inicio}:00`;
-            
-            
-            const UTC_EndTime = `${_reserva.fecha}T${_reserva.hora_fin}:00`;            
-            
+
+
+            const UTC_EndTime = `${_reserva.fecha}T${_reserva.hora_fin}:00`;
+
 
             const UTC_Date = `${_reserva.fecha}T${_reserva.hora_inicio}:00`;
-            
+
 
             const reserva = new Reserva();
 
@@ -95,7 +97,33 @@ export class ReservationService {
         }
     }
 
+    async findById(id: number) {
+        const reserva = await this.reservaRepository.findOne({ where: { id: id }, relations: ["cubiculo"] });
+        const userManyReservas = await this.userManyReservaRepository.find({ where: { reserva: reserva }, relations: ["user", "reserva"] })
 
+
+        let reservationDetailDTO = new ReservaDetailDTO();
+
+        reservationDetailDTO.cubiculoNombre = reserva.cubiculo.nombre;
+        reservationDetailDTO.horaInicio = addPMorAM(moment(reserva.hora_inicio).get("hour"))
+        reservationDetailDTO.horaFin = addPMorAM(moment(reserva.hora_fin).get("hour"))
+        reservationDetailDTO.tema    = reserva.theme;
+        reservationDetailDTO.estado =  reserva.estado;
+        reservationDetailDTO.sitiosDisponible =  6 - userManyReservas.length;
+        reservationDetailDTO.sede = reserva.sede;
+        reservationDetailDTO.participantes = [];
+        
+        userManyReservas.forEach(e => {
+            reservationDetailDTO.participantes.push({
+                codigo:e.user.codigo,
+                nombre:e.user.nombres.split(" ")[0]+ " "+ e.user.apellidos
+                
+            })
+            
+        })
+
+        return reservationDetailDTO;
+    }
 
 
 }
