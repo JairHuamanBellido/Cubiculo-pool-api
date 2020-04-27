@@ -78,6 +78,7 @@ export class ReservationService {
             reserva.hora_fin = new Date(UTC_EndTime);
             reserva.hora_inicio = new Date(UTC_StartTime);
             reserva.sede = _reserva.sede;
+            reserva.theme = _reserva.theme;
 
             await this.reservaRepository.save(reserva);
 

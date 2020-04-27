@@ -31,4 +31,8 @@ export class CreateReservaDTO{
     @IsNotEmpty()
     @ApiProperty()
     cubiculo_id:number;
+
+    @IsNotEmpty()
+    @ApiProperty()
+    theme:string;
 }

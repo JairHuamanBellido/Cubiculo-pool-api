@@ -41,7 +41,7 @@ export class UsersService {
                 password: AES.encrypt(_newUser.password, secretKey).toString()
             });
             await this.userRepository.save(newUser);
-            Logger.log(`${newUser} se ha registrado correctamente`,'User Activity')
+            Logger.log(`${newUser} se ha registrado correctamente`, 'User Activity')
             return { "message": "Usuario creado correctamente" };
         }
 

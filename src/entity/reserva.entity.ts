@@ -27,6 +27,9 @@ export class Reserva{
     @Column()
     sede:string
 
+    @Column()
+    theme:string
+
     @OneToMany(type => UserManyReserva, userManyReserva=> userManyReserva.reserva)
   userManyReservas!: UserManyReserva[];
 
