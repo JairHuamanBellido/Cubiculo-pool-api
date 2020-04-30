@@ -8,10 +8,10 @@ import { secretKey } from '../../../key/key';
 import { Reserva } from '../../../entity/reserva.entity';
 import { UserManyReserva } from '../../../entity/userManyReservas.entity';
 import *  as moment from 'moment';
-import { CreateCubiculoDTO } from '../../../module/cubicles/dto/create-cubiculos.dto';
-import { addPMorAM } from 'src/utils/algorithms';
+import { addPMorAM } from '../../../utils/algorithms';
 import { UserHistoryReservations } from '../dto/createUserHistoryReservation.dto';
 import { UserReservationsAvailables } from '../dto/createUserReservationsAvailables.dto';
+import { UserResponseDTO } from '../dto/createUserResponse.dto';
 @Injectable()
 export class UsersService {
 
@@ -203,7 +203,7 @@ export class UsersService {
         if(user){
             return {
                 status: 200,
-                response:user
+                response:new UserResponseDTO(user)
             }
         }else{
             return{

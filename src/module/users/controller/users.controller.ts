@@ -2,10 +2,11 @@ import { Controller, Get, Res, Post, Body, Logger, Query, Param, HttpException, 
 import { Response } from 'express';
 import { UsersService } from '../services/users.service';
 import { CreateUserRequestDTO } from '../dto/createUserRequest.dto';
-import { ApiResponse, ApiConflictResponse, ApiProperty, ApiQuery, ApiParam } from '@nestjs/swagger';
+import { ApiResponse, ApiConflictResponse,  ApiQuery, ApiParam } from '@nestjs/swagger';
 import { UserHoursAvailableDTO } from '../dto/createHoursAvailableUser.dto';
 import { UserReservationsAvailables } from '../dto/createUserReservationsAvailables.dto';
 import { UserHistoryReservations } from '../dto/createUserHistoryReservation.dto';
+import { UserResponseDTO } from '../dto/createUserResponse.dto';
 
 @Controller('users')
 export class UsersController {
@@ -85,6 +86,9 @@ export class UsersController {
         
     }
 
+
+    @ApiResponse({description: 'Busca un usuario por código', status:200, type: UserResponseDTO})
+    @ApiParam({required:true,name:'id', description: 'u201413797'})
     @Get(':id')
     async findById(
         @Res() res:Response,
