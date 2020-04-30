@@ -9,6 +9,7 @@ import { UserManyReserva } from "../../../entity/userManyReservas.entity";
 import *  as moment from "moment";
 import { ReservaDetailDTO } from '../dto/create-reservaDetail.dto';
 import { addPMorAM } from '../../../utils/algorithms';
+import { UsersService } from '../../../module/users/services/users.service';
 @Injectable()
 export class ReservationService {
 
@@ -23,7 +24,9 @@ export class ReservationService {
         private userRepository: Repository<User>,
 
         @InjectRepository(UserManyReserva)
-        private userManyReservaRepository: Repository<UserManyReserva>
+        private userManyReservaRepository: Repository<UserManyReserva>,
+
+        private userService: UsersService
     ) { }
 
 
@@ -43,6 +46,8 @@ export class ReservationService {
              */
 
 
+
+
             const UTC_StartTime = `${_reserva.fecha}T${_reserva.hora_inicio}:00`;
 
 
@@ -55,6 +60,9 @@ export class ReservationService {
             const reserva = new Reserva();
 
 
+            const day = moment(UTC_StartTime).get("day") === moment().get("day") ? "Hoy" : "Mañana"
+
+
             const cubiculoTarget = await this.cubiculoRepository.findOne({ id: _reserva.cubiculo_id })
 
             const usuario_owner_1 = await this.userRepository.findOne({ codigo: _reserva.codigo_uno });
@@ -62,6 +70,11 @@ export class ReservationService {
             const usuario_owner_2 = await this.userRepository.findOne({ codigo: _reserva.codigo_dos });
 
 
+            const hoursAvailableUser2 = await this.userService.findHoursAvailablePerDay(usuario_owner_2.codigo, day);
+
+            if (hoursAvailableUser2 == 0 || hoursAvailableUser2 >= moment(UTC_EndTime).get("hour") - moment(UTC_EndTime).get("hour")) {
+                return ErrorEvent
+            }
             const many_to_many_1 = new UserManyReserva();
 
             many_to_many_1.role = "Admin";
@@ -107,19 +120,19 @@ export class ReservationService {
         reservationDetailDTO.cubiculoNombre = reserva.cubiculo.nombre;
         reservationDetailDTO.horaInicio = addPMorAM(moment(reserva.hora_inicio).get("hour"))
         reservationDetailDTO.horaFin = addPMorAM(moment(reserva.hora_fin).get("hour"))
-        reservationDetailDTO.tema    = reserva.theme;
-        reservationDetailDTO.estado =  reserva.estado;
-        reservationDetailDTO.sitiosDisponible =  6 - userManyReservas.length;
+        reservationDetailDTO.tema = reserva.theme;
+        reservationDetailDTO.estado = reserva.estado;
+        reservationDetailDTO.sitiosDisponible = 6 - userManyReservas.length;
         reservationDetailDTO.sede = reserva.sede;
         reservationDetailDTO.participantes = [];
-        
+
         userManyReservas.forEach(e => {
             reservationDetailDTO.participantes.push({
-                codigo:e.user.codigo,
-                nombre:e.user.nombres.split(" ")[0]+ " "+ e.user.apellidos
-                
+                codigo: e.user.codigo,
+                nombre: e.user.nombres.split(" ")[0] + " " + e.user.apellidos
+
             })
-            
+
         })
 
         return reservationDetailDTO;

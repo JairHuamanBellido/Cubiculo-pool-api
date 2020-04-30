@@ -197,4 +197,19 @@ export class UsersService {
 
     }
 
+
+    async findById(code:string){
+        const user =  await this.userRepository.findOne({codigo:code})
+        if(user){
+            return {
+                status: 200,
+                response:user
+            }
+        }else{
+            return{
+                status:404,
+                response: {"message": "Usuario no encontrado"}
+            }
+        }
+    }
 }

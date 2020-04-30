@@ -11,7 +11,7 @@ import { UserManyReserva } from '../../entity/userManyReservas.entity';
   imports: [TypeOrmModule.forFeature([User,Reserva,UserManyReserva])],
   providers: [UsersService],
   controllers: [UsersController],
-  exports: [TypeOrmModule],
+  exports: [TypeOrmModule,UsersService],
 
 })
 export class UsersModule {}

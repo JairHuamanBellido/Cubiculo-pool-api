@@ -85,4 +85,14 @@ export class UsersController {
         
     }
 
+    @Get(':id')
+    async findById(
+        @Res() res:Response,
+        @Param('id') id:string
+    ){
+        const user =  await this.userService.findById(id);
+
+        res.status(user.status).json(user.response)
+    }
+
 }
