@@ -94,6 +94,8 @@ export class UsersController {
         @Res() res:Response,
         @Param('id') id:string
     ){
+
+        Logger.log(id,"Usuario ID");
         const user =  await this.userService.findById(id);
 
         res.status(user.status).json(user.response)
