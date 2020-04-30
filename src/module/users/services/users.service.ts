@@ -102,6 +102,7 @@ export class UsersService {
     async findHoursAvailablePerDay(code: string, date) {
         // Encontrar al usuario
         let timeToReservation = " "
+        let hoursTotal = 0;
         if (date === "Hoy") {
             timeToReservation = moment().format('YYYY-MM-DD')
 
@@ -119,17 +120,28 @@ export class UsersService {
         }
 
         // Buscar todas las reservas del dia del usuario
-        const reserva = await this.reservaRepository.findOne({ where: { fecha: timeToReservation } })
+        const reserva = await this.reservaRepository.find({ where: { fecha: timeToReservation } })
 
 
-        const userManyReserva = await this.userManyReservaRepository.find({ where: { user: user, role: "Admin", reserva: reserva }, relations: ["reserva"] })
+        const userManyReserva = await this.userManyReservaRepository.find({ where: { user: user, role: "Admin" }, relations: ["reserva"] })
 
 
         if (userManyReserva.length) {
 
             const time = moment(userManyReserva[0].reserva.hora_inicio).get("hour");
             const time_fin = moment(userManyReserva[0].reserva.hora_fin).get("hour");
-            return await 2 - (time_fin - time)
+
+            userManyReserva.forEach(e =>{
+                reserva.forEach(j=>{
+                    if(e.reserva.id === j.id){
+                        hoursTotal =  hoursTotal + (moment(e.reserva.hora_fin).get("hour") - moment(e.reserva.hora_inicio).get("hour"))
+                    }
+                })
+            })
+            
+            Logger.log( hoursTotal.toString(),"Horas total");
+
+            return await 2 - hoursTotal
 
         }
         else {
