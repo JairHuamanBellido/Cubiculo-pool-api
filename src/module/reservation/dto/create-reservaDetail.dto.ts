@@ -1,5 +1,14 @@
 import { ApiProperty } from "@nestjs/swagger";
 
+
+
+
+ class Student{
+    codigo:string;
+    nombre:string;     
+ }
+
+
 export class ReservaDetailDTO{
 
     @ApiProperty()
@@ -15,7 +24,7 @@ export class ReservaDetailDTO{
     horaFin:string;
     
     @ApiProperty()
-    participantes:any[]
+    participantes:Student[]
     
     @ApiProperty()
     tema:string;

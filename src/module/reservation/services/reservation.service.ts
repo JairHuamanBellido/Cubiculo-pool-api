@@ -10,6 +10,7 @@ import *  as moment from "moment";
 import { ReservaDetailDTO } from '../dto/create-reservaDetail.dto';
 import { addPMorAM } from '../../../utils/algorithms';
 import { UsersService } from '../../../module/users/services/users.service';
+import { TIMEZONE_PERU } from '../../../utils/timeZone';
 @Injectable()
 export class ReservationService {
 
@@ -60,7 +61,7 @@ export class ReservationService {
             const reserva = new Reserva();
 
 
-            const day = moment(UTC_StartTime).get("day") === moment().get("day") ? "Hoy" : "Mañana"
+            const day = moment(UTC_StartTime).get("day") === TIMEZONE_PERU.get("day") ? "Hoy" : "Mañana"
 
 
             const cubiculoTarget = await this.cubiculoRepository.findOne({ id: _reserva.cubiculo_id })

@@ -7,7 +7,6 @@ import { UserHoursAvailableDTO } from '../dto/createHoursAvailableUser.dto';
 import { UserReservationsAvailables } from '../dto/createUserReservationsAvailables.dto';
 import { UserHistoryReservations } from '../dto/createUserHistoryReservation.dto';
 import { UserResponseDTO } from '../dto/createUserResponse.dto';
-
 @Controller('users')
 export class UsersController {
 
@@ -41,7 +40,6 @@ export class UsersController {
         @Query('date') date: string
     ) {
         Logger.log(`${id} esta buscando horas disponibles para ${date}`, "Busqueda de horas disponibles");
-
 
 
         try {

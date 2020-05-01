@@ -12,6 +12,7 @@ import { addPMorAM } from '../../../utils/algorithms';
 import { UserHistoryReservations } from '../dto/createUserHistoryReservation.dto';
 import { UserReservationsAvailables } from '../dto/createUserReservationsAvailables.dto';
 import { UserResponseDTO } from '../dto/createUserResponse.dto';
+import { TIMEZONE_PERU } from '../../../utils/timeZone';
 @Injectable()
 export class UsersService {
 
@@ -59,7 +60,7 @@ export class UsersService {
 
         const reserva = await this.reservaRepository.find(
             {
-                where: { estado: Not("Terminado"), fecha: MoreThanOrEqual(moment().format("YYYY-MM-DD")) },
+                where: { estado: Not("Terminado"), fecha: MoreThanOrEqual(TIMEZONE_PERU.format("YYYY-MM-DD")) },
                 relations: ["cubiculo"]
             })
 
@@ -85,7 +86,7 @@ export class UsersService {
                     createCubiculosDTO.push({
                         id: j.id,
                         name: j.cubiculo.nombre,
-                        day: j.fecha.toString() === moment().format("YYYY-MM-DD").toString() ? "Hoy" : "Mañana",
+                        day: j.fecha.toString() === TIMEZONE_PERU.format("YYYY-MM-DD").toString() ? "Hoy" : "Mañana",
                         startTime: addPMorAM(moment(e.reserva.hora_inicio).get("hours")),
                         endTime: addPMorAM(moment(e.reserva.hora_fin).get("hours")),
                         status: j.estado
@@ -104,11 +105,11 @@ export class UsersService {
         let timeToReservation = " "
         let hoursTotal = 0;
         if (date === "Hoy") {
-            timeToReservation = moment().format('YYYY-MM-DD')
+            timeToReservation = TIMEZONE_PERU.format('YYYY-MM-DD')
 
         }
         else if (date == "Mañana") {
-            timeToReservation = moment().add(1, "days").format("YYYY-MM-DD")
+            timeToReservation = TIMEZONE_PERU.add(1, "days").format("YYYY-MM-DD")
         }
 
 
@@ -181,7 +182,7 @@ export class UsersService {
                     createUserHistoryReservations.push({
                         id: j.id,
                         cubiculoName: j.cubiculo.nombre,
-                        fecha: moment().format("DD-MM-YYYY"),
+                        fecha: TIMEZONE_PERU.format("DD-MM-YYYY"),
                         rol: e.role
                     })
                 }

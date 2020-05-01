@@ -6,6 +6,7 @@ import { Cubiculo } from '../../../entity/cubiculo.entity';
 import * as moment from "moment";
 import { CreateCubiculoDTO } from '../dto/create-cubiculos.dto';
 import { addPMorAM } from '../../../utils/algorithms';
+import { TIMEZONE_PERU } from '../../../utils/timeZone';
 
 @Injectable()
 export class CubiclesService {
@@ -26,20 +27,20 @@ export class CubiclesService {
     
         let timeToReservation  =" "
         if(_date === "Hoy"){
-            _date = moment().format('YYYY-MM-DD')
+            _date = TIMEZONE_PERU.format('YYYY-MM-DD')
 
             timeToReservation = "Hoy"
         }
         else if(_date === "Mañana"){
-            _date = moment().add(1,"days").format("YYYY-MM-DD")
+            _date = TIMEZONE_PERU.add(1,"days").format("YYYY-MM-DD")
             timeToReservation =  "Mañana"
         }
 
-        const startTime = moment().utc().format(`${_date}T${_startTime}:00`);
+        const startTime = TIMEZONE_PERU.utc().format(`${_date}T${_startTime}:00`);
 
         const endHour = moment(startTime).add(_hours, 'hour').get("hour");
 
-        const endTime = moment().utc().format(`${_date}T${endHour}:00:00`)
+        const endTime = TIMEZONE_PERU.utc().format(`${_date}T${endHour}:00:00`)
 
       
       
@@ -79,7 +80,7 @@ export class CubiclesService {
          * true: mañana
          * false: hoy
          */
-        const dayState = moment().isBefore(endTime);
+        const dayState = TIMEZONE_PERU.isBefore(endTime);
         
 
 
