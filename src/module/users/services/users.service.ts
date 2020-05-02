@@ -82,7 +82,8 @@ export class UsersService {
         userManyReserva.forEach((e) => {
             reserva.forEach((j) => {
                 if ( j.id === e.reserva.id) {
-
+                    console.log(j.fecha.toString())
+                    console.log(TIMEZONE_PERU.format("YYYY-MM-DD").toString());
                     createCubiculosDTO.push({
                         id: j.id,
                         name: j.cubiculo.nombre,
