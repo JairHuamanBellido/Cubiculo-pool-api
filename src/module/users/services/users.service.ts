@@ -76,7 +76,7 @@ export class UsersService {
 
         const createCubiculosDTO: UserReservationsAvailables[] = [];
         
-        
+        Logger.log("")
 
 
         userManyReserva.forEach((e) => {
@@ -128,20 +128,25 @@ export class UsersService {
         const userManyReserva = await this.userManyReservaRepository.find({ where: { user: user, role: "Admin" }, relations: ["reserva"] })
 
 
+        Logger.log(reserva,"Reserva Horas disponibles")
+        Logger.log(userManyReserva, "Reserva Many horas disponibles")
+
         if (userManyReserva.length) {
 
             const time = moment(userManyReserva[0].reserva.hora_inicio).get("hour");
             const time_fin = moment(userManyReserva[0].reserva.hora_fin).get("hour");
 
+
             userManyReserva.forEach(e =>{
                 reserva.forEach(j=>{
                     if(e.reserva.id === j.id){
+                        Logger.log(moment(e.reserva.hora_inicio).get("hour"), "qwe")
                         hoursTotal =  hoursTotal + (moment(e.reserva.hora_fin).get("hour") - moment(e.reserva.hora_inicio).get("hour"))
+                        Logger.log(hoursTotal, "HoursTotal")
                     }
                 })
             })
             
-            Logger.log( hoursTotal.toString(),"Horas total");
 
             return await 2 - hoursTotal
 

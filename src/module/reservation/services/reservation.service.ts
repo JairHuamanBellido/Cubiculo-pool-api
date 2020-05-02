@@ -72,7 +72,7 @@ export class ReservationService {
 
 
             const hoursAvailableUser2 = await this.userService.findHoursAvailablePerDay(usuario_owner_2.codigo, day);
-            
+                
      
             if (hoursAvailableUser2 == 0 || !(hoursAvailableUser2 >= moment(UTC_EndTime).get("hour") - moment(UTC_StartTime).get("hour"))) {
                 return ErrorEvent
