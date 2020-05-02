@@ -64,7 +64,9 @@ export class UsersService {
                 relations: ["cubiculo"]
             })
 
-
+        
+            Logger.log(TIMEZONE_PERU.format("YYYY-MM-DD"), "FECHA ACTUAL");
+        
 
         // Encontrar las reservas del usuario
         const userManyReserva = await this.userManyReservaRepository.find(
@@ -76,14 +78,12 @@ export class UsersService {
 
         const createCubiculosDTO: UserReservationsAvailables[] = [];
         
-        Logger.log("")
 
 
         userManyReserva.forEach((e) => {
             reserva.forEach((j) => {
                 if ( j.id === e.reserva.id) {
-                    console.log(j.fecha.toString())
-                    console.log(TIMEZONE_PERU.format("YYYY-MM-DD").toString());
+
                     createCubiculosDTO.push({
                         id: j.id,
                         name: j.cubiculo.nombre,
@@ -121,15 +121,16 @@ export class UsersService {
             return new ErrorEvent("qwe")
         }
 
+        Logger.log(timeToReservation, "TIME TO RESERVATION");
+
         // Buscar todas las reservas del dia del usuario
         const reserva = await this.reservaRepository.find({ where: { fecha: timeToReservation } })
 
+        Logger.log(reserva, "RESERVA ARRAY");
 
         const userManyReserva = await this.userManyReservaRepository.find({ where: { user: user, role: "Admin" }, relations: ["reserva"] })
 
 
-        Logger.log(reserva,"Reserva Horas disponibles")
-        Logger.log(userManyReserva, "Reserva Many horas disponibles")
 
         if (userManyReserva.length) {
 
