@@ -12,7 +12,7 @@ import { addPMorAM } from '../../../utils/algorithms';
 import { UserHistoryReservations } from '../dto/createUserHistoryReservation.dto';
 import { UserReservationsAvailables } from '../dto/createUserReservationsAvailables.dto';
 import { UserResponseDTO } from '../dto/createUserResponse.dto';
-import { TIMEZONE_PERU } from '../../../utils/timeZone';
+//import { moment().subtract(5,"hours") } from '../../../utils/timeZone';
 @Injectable()
 export class UsersService {
 
@@ -60,12 +60,12 @@ export class UsersService {
 
         const reserva = await this.reservaRepository.find(
             {
-                where: { estado: Not("Terminado"), fecha: MoreThanOrEqual(TIMEZONE_PERU.format("YYYY-MM-DD")) },
+                where: { estado: Not("Terminado"), fecha: MoreThanOrEqual(moment().subtract(5,"hours").format("YYYY-MM-DD")) },
                 relations: ["cubiculo"]
             })
 
         
-            Logger.log(TIMEZONE_PERU.format("YYYY-MM-DD"), "FECHA ACTUAL");
+            Logger.log(moment().subtract(5,"hours").format("YYYY-MM-DD"), "FECHA ACTUAL");
         
 
         // Encontrar las reservas del usuario
@@ -87,7 +87,7 @@ export class UsersService {
                     createCubiculosDTO.push({
                         id: j.id,
                         name: j.cubiculo.nombre,
-                        day: j.fecha.toString() === TIMEZONE_PERU.format("YYYY-MM-DD").toString() ? "Hoy" : "Mañana",
+                        day: j.fecha.toString() === moment().subtract(5,"hours").format("YYYY-MM-DD").toString() ? "Hoy" : "Mañana",
                         startTime: addPMorAM(moment(e.reserva.hora_inicio).get("hours")),
                         endTime: addPMorAM(moment(e.reserva.hora_fin).get("hours")),
                         status: j.estado
@@ -106,11 +106,11 @@ export class UsersService {
         let timeToReservation = " "
         let hoursTotal = 0;
         if (date === "Hoy") {
-            timeToReservation = TIMEZONE_PERU.format('YYYY-MM-DD')
+            timeToReservation = moment().subtract(5,"hours").format('YYYY-MM-DD')
 
         }
         else if (date == "Mañana") {
-            timeToReservation = TIMEZONE_PERU.add(1, "days").format("YYYY-MM-DD")
+            timeToReservation = moment().subtract(5,"hours").add(1, "days").format("YYYY-MM-DD")
         }
 
 
@@ -189,7 +189,7 @@ export class UsersService {
                     createUserHistoryReservations.push({
                         id: j.id,
                         cubiculoName: j.cubiculo.nombre,
-                        fecha: TIMEZONE_PERU.format("DD-MM-YYYY"),
+                        fecha: moment().subtract(5,"hours").format("DD-MM-YYYY"),
                         rol: e.role
                     })
                 }
