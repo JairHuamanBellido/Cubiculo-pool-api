@@ -15,15 +15,15 @@ export const calculateDateForCron = (fecha: string, horaInicio: string, minutesB
     }
     let differenceHour = moment(`${fecha}T${hourString}:00:00`)
 
-    let horaAction = (differenceHour.get('hours') - 1)
+    let horaActivation = (differenceHour.get('hours') - 1)
 
 
 
     return {
         dayOfWeek: dayOfWeek,
 
-        horaAction: horaAction,
-        minutos: 40
+        horaAction: horaActivation,
+        minutos: 45
     }
 
 }

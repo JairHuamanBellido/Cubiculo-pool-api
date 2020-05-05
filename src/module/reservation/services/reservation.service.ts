@@ -8,9 +8,12 @@ import { User } from '../../../entity/user.entity';
 import { UserManyReserva } from "../../../entity/userManyReservas.entity";
 import *  as moment from "moment";
 import { ReservaDetailDTO } from '../dto/create-reservaDetail.dto';
-import { addPMorAM } from '../../../utils/algorithms';
+import { addPMorAM, calculateDateForCron } from '../../../utils/algorithms';
 import { UsersService } from '../../../module/users/services/users.service';
 import { TIMEZONE_PERU } from '../../../utils/timeZone';
+import { SchedulerRegistry } from '@nestjs/schedule';
+import { CronJob } from "cron";
+
 @Injectable()
 export class ReservationService {
 
@@ -27,7 +30,10 @@ export class ReservationService {
         @InjectRepository(UserManyReserva)
         private userManyReservaRepository: Repository<UserManyReserva>,
 
-        private userService: UsersService
+        private userService: UsersService,
+
+        private schedulerRegistry: SchedulerRegistry
+
     ) { }
 
 
@@ -72,8 +78,8 @@ export class ReservationService {
 
 
             const hoursAvailableUser2 = await this.userService.findHoursAvailablePerDay(usuario_owner_2.codigo, day);
-                
-     
+
+
             if (hoursAvailableUser2 == 0 || !(hoursAvailableUser2 >= moment(UTC_EndTime).get("hour") - moment(UTC_StartTime).get("hour"))) {
                 return ErrorEvent
             }
@@ -102,7 +108,9 @@ export class ReservationService {
 
             many_to_many_2.reserva = reserva;
             many_to_many_1.reserva = reserva;
-
+            const cronJob = await this.activationEnableJob(reserva.id,_reserva.fecha,_reserva.hora_inicio)
+            
+            console.log(cronJob);
             await this.userManyReservaRepository.save(many_to_many_1);
 
             await this.userManyReservaRepository.save(many_to_many_2);
@@ -141,5 +149,30 @@ export class ReservationService {
         return reservationDetailDTO;
     }
 
+
+    async activationEnableJob(name: any, fecha: string, horaInicio: string) {
+        const resultsTimes = calculateDateForCron(fecha, horaInicio, 15)
+
+        const job = new CronJob(`0 ${resultsTimes.minutos} ${resultsTimes.horaAction} * * ${resultsTimes.dayOfWeek}`, () => {
+            Logger.warn(`time (${fecha}) for job ${name} to run!`);
+            this.deleteCron(name);
+        });
+
+        this.schedulerRegistry.addCronJob(name, job);
+        job.start();
+
+        Logger.warn(
+            `job ${name} added for each minute at ${fecha} seconds!`,
+        );
+
+        return {
+            "dayOfWeek": calculateDateForCron(fecha, horaInicio, 1)
+        }
+    }
+
+    deleteCron(name: string) {
+        this.schedulerRegistry.deleteCronJob(name);
+        Logger.warn(`job ${name} deleted!`);
+    }
 
 }
