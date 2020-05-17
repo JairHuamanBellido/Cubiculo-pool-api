@@ -21,6 +21,7 @@ export class UserReservationsAvailables{
     @ApiProperty()
     public status:string
 
+
     constructor(cubiculo: any){
         this.id =  cubiculo.id;
         this.name = cubiculo.nombre

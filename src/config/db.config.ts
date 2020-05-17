@@ -4,6 +4,7 @@ import { ConnectionOptions } from "typeorm";
 import { Reserva } from "../entity/reserva.entity";
 import { Cubiculo } from "../entity/cubiculo.entity";
 import { UserManyReserva } from "../entity/userManyReservas.entity";
+import { Cron } from "src/entity/cron.entity";
 config();
  const DB_CONFIGURATION :ConnectionOptions = {
     type: "postgres",
@@ -12,7 +13,7 @@ config();
     username: process.env.DATABASE_USERNAME,
     password: process.env.DATABASE_PASSWORD,
     database: process.env.DATABASE_NAME,
-    entities: [User, Reserva,Cubiculo,UserManyReserva],
+    entities: [User, Reserva,Cubiculo,UserManyReserva, Cron],
     synchronize: false,
     logging: false,
     migrationsRun:true,

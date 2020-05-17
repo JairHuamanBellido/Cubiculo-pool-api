@@ -35,5 +35,8 @@ export class ReservaDetailDTO{
     @ApiProperty()
     estado:string;
 
+    @ApiProperty()
+    activate:string;
+    
     constructor(){}
 }

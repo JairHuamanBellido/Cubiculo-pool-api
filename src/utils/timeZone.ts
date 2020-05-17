@@ -1,4 +1,3 @@
-import  * as tzmoment from "moment-timezone";
 import * as moment from "moment";
 
 //export const TIMEZONE_PERU = tzmoment.tz("America/Lima") 

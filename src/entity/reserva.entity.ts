@@ -1,6 +1,5 @@
 import {  Entity, PrimaryGeneratedColumn, ManyToOne, Column, ManyToMany, JoinTable, OneToMany} from "typeorm";
 import { Cubiculo } from "./cubiculo.entity";
-import { User } from "./user.entity";
 import { UserManyReserva } from "./userManyReservas.entity";
 
 @Entity()

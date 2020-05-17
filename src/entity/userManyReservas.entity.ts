@@ -12,7 +12,9 @@ export class UserManyReserva{
     
     @Column()
     role:string;
-
+    
+    @Column()
+    activate:string;
 
     @ManyToOne(type => User, user => user.userManyReservas)
     public user!: User;

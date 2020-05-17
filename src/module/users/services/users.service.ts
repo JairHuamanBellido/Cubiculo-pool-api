@@ -78,7 +78,7 @@ export class UsersService {
 
         const createCubiculosDTO: UserReservationsAvailables[] = [];
         
-
+        console.log(reserva);
 
         userManyReserva.forEach((e) => {
             reserva.forEach((j) => {
@@ -90,7 +90,8 @@ export class UsersService {
                         day: j.fecha.toString() === moment().subtract(5,"hours").format("YYYY-MM-DD").toString() ? "Hoy" : "Mañana",
                         startTime: addPMorAM(moment(e.reserva.hora_inicio).get("hours")),
                         endTime: addPMorAM(moment(e.reserva.hora_fin).get("hours")),
-                        status: j.estado
+                        status: j.estado,
+
                     })
                 }
 
@@ -220,4 +221,7 @@ export class UsersService {
             }
         }
     }
+
+
+
 }

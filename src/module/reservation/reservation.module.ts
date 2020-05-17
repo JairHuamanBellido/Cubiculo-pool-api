@@ -8,9 +8,10 @@ import { Cubiculo } from '../../entity/cubiculo.entity';
 import { Repository } from 'typeorm';
 import { UserManyReserva } from '../../entity/userManyReservas.entity';
 import { UsersModule } from '../users/users.module';
+import { CronModule } from '../cron/cron.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Reserva,User,Cubiculo,UserManyReserva]),UsersModule],
+  imports: [TypeOrmModule.forFeature([Reserva,User,Cubiculo,UserManyReserva]),UsersModule,CronModule],
   providers: [ReservationService,Repository],
   controllers: [ReservationController],
   
