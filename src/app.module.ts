@@ -11,6 +11,7 @@ import { CubiclesModule } from './module/cubicles/cubicles.module';
 import { ScheduleModule } from '@nestjs/schedule';
 import { CronModule } from './module/cron/cron.module';
 import { CronService } from './module/cron/service/cron.service';
+import { OffersModule } from './module/offers/offers.module';
 @Module({
     imports: [
         TypeOrmModule.forRoot(DB_CONFIGURATION),
@@ -20,18 +21,19 @@ import { CronService } from './module/cron/service/cron.service';
         CubiclesModule,
         ScheduleModule.forRoot(),
         CronModule,
+        OffersModule,
     ],
 
     controllers: [AppController],
     providers: [AppService, AuthService],
 })
 export class AppModule {
-    constructor(private cronService:CronService) {
-        this.cronService.initCronJobs()
-    }
+    // constructor(private cronService:CronService) {
+    //     this.cronService.initCronJobs()
+    // }
 
-    async initCron() {
+    // async initCron() {
         
-        console.log("Iniciando los")
-    }
+    //     console.log("Iniciando los")
+    // }
 }

@@ -1,7 +1,7 @@
 import {  Entity, PrimaryGeneratedColumn, ManyToOne, Column, ManyToMany, JoinTable, OneToMany} from "typeorm";
 import { Cubiculo } from "./cubiculo.entity";
 import { UserManyReserva } from "./userManyReservas.entity";
-
+import {  OfertaCubiculo} from "./ofertaCubiculo.entity";
 @Entity()
 export class Reserva{
 
@@ -32,4 +32,6 @@ export class Reserva{
     @OneToMany(type => UserManyReserva, userManyReserva=> userManyReserva.reserva)
   userManyReservas!: UserManyReserva[];
 
+    @OneToMany(type=> OfertaCubiculo, ofertaCubiculo=> ofertaCubiculo)
+    ofertas!: OfertaCubiculo[]
 }

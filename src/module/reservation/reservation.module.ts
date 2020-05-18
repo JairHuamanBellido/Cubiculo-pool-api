@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Module, forwardRef } from '@nestjs/common';
 import { ReservationService } from './services/reservation.service';
 import { ReservationController } from './controller/reservation.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -9,9 +9,11 @@ import { Repository } from 'typeorm';
 import { UserManyReserva } from '../../entity/userManyReservas.entity';
 import { UsersModule } from '../users/users.module';
 import { CronModule } from '../cron/cron.module';
+import { OfertaCubiculo } from 'src/entity/ofertaCubiculo.entity';
+import { OffersModule } from '../offers/offers.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Reserva,User,Cubiculo,UserManyReserva]),UsersModule,CronModule],
+  imports: [TypeOrmModule.forFeature([Reserva,User,Cubiculo,UserManyReserva, OfertaCubiculo]),UsersModule,CronModule, forwardRef(()=>OffersModule)],
   providers: [ReservationService,Repository],
   controllers: [ReservationController],
   

@@ -13,6 +13,7 @@ import { UsersService } from '../../../module/users/services/users.service';
 import { TIMEZONE_PERU } from '../../../utils/timeZone';
 import { ReservaActivation } from '../dto/create-reservaActivation.dto';
 import { CronService } from '../../../module/cron/service/cron.service';
+import { OfertaCubiculo } from 'src/entity/ofertaCubiculo.entity';
 
 @Injectable()
 export class ReservationService {
@@ -28,6 +29,9 @@ export class ReservationService {
 
         @InjectRepository(UserManyReserva)
         private userManyReservaRepository: Repository<UserManyReserva>,
+        
+        @InjectRepository(OfertaCubiculo)
+        private ofertaCubiculoRepository: Repository<OfertaCubiculo>,
 
         private userService: UsersService,
 
@@ -217,9 +221,18 @@ export class ReservationService {
             where: { reserva: reserva },
         });
 
+        const ofertaCubiculo =  await this.ofertaCubiculoRepository.findOne({where: {reserva:  reserva}})
         this.userManyReservaRepository.remove(usermanyreservas).then(() => {
             this.reservaRepository.remove(reserva);
         });
+
+        await this.ofertaCubiculoRepository.delete(ofertaCubiculo).then(async()=>{
+            await this.userManyReservaRepository.delete(usermanyreservas[0])
+            await this.userManyReservaRepository.delete(usermanyreservas[1])
+        }).then( async()=>{
+
+            await this.reservaRepository.delete(reserva);
+        })
 
         return { message: 'Se ha removido con exito la reserva' };
     }

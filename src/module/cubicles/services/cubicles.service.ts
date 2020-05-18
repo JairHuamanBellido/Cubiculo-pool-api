@@ -80,7 +80,6 @@ export class CubiclesService {
          * true: mañana
          * false: hoy
          */
-        const dayState = TIMEZONE_PERU.isBefore(endTime);
         
 
 
