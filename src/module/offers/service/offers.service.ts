@@ -3,9 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Reserva } from 'src/entity/reserva.entity';
 import {
     Repository,
-    MoreThanOrEqual,
-    LessThan,
-    LessThanOrEqual,
+
 } from 'typeorm';
 import { OfertaCubiculo } from 'src/entity/ofertaCubiculo.entity';
 import { CreateOfferReservationDTO } from '../dto/create-offer.dto';
@@ -13,14 +11,24 @@ import * as moment from 'moment';
 import { CreateOfferReponseDTO } from '../dto/create-offerResponse.dto';
 import { addPMorAM } from 'src/utils/algorithms';
 import { CreateOfferDetailDTO } from '../dto/create-offerDetail.dto';
+import { JoinReservationDTO } from '../dto/create-joinReservation.dto';
+import { UserManyReserva } from 'src/entity/userManyReservas.entity';
+import { User } from 'src/entity/user.entity';
 @Injectable()
 export class OffersService {
+
     constructor(
         @InjectRepository(Reserva)
         private reservaRepository: Repository<Reserva>,
 
         @InjectRepository(OfertaCubiculo)
         private ofertaRepository: Repository<OfertaCubiculo>,
+
+        @InjectRepository(User)
+        private userRepository:Repository<User>,
+
+        @InjectRepository(UserManyReserva)
+        private userManyReservaRepository:Repository<UserManyReserva>
     ) {}
 
     async createOffer(offer: CreateOfferReservationDTO) {
@@ -43,7 +51,9 @@ export class OffersService {
 
 
     async findById(id:number){
-        const offer =  await this.ofertaRepository.findOne({where: {id: id}})
+        const offer =  await this.ofertaRepository.findOne({where: {id: id}, relations:['reserva']})
+        
+        console.log(offer);
         const reserva =  await this.reservaRepository.findOne({where:{id:offer.reserva.id}, relations: ['cubiculo']})
 
         let offerDetail =  new CreateOfferDetailDTO();
@@ -85,5 +95,38 @@ export class OffersService {
         });
 
         return result;
+    }
+
+
+    async joinReservation(joinReservation: JoinReservationDTO) {
+        
+        const offer = await this.ofertaRepository.findOne({where:{id: joinReservation.ofertaId}, relations: ['reserva']});
+
+        console.log(offer);
+
+        const student =  await this.userRepository.findOne({where: {codigo: joinReservation.codigo}})
+
+        const reserva = await this.reservaRepository.findOne({where: {id: offer.reserva.id}})
+       
+        const userManyReservas =  new UserManyReserva();
+
+
+        userManyReservas.role ="Participante"
+        userManyReservas.user =  student;
+        userManyReservas.reserva = reserva;
+        userManyReservas.activate =  "true";
+
+        if(joinReservation.apple){
+            offer.apple =  false
+        }
+
+        if(joinReservation.pizarra){
+            offer.pizarra =  false
+        }
+
+        offer.sitios =  offer.sitios - 1;
+
+        await this.ofertaRepository.save(offer)
+        await this.userManyReservaRepository.save(userManyReservas);
     }
 }

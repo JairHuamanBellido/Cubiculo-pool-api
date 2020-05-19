@@ -1,7 +1,8 @@
-import { Controller, Post, Res, Body, Get, Param } from '@nestjs/common';
+import { Controller, Post, Res, Body, Get, Param, Put } from '@nestjs/common';
 import { OffersService } from '../service/offers.service';
 import { Response } from 'express';
 import { CreateOfferReservationDTO } from '../dto/create-offer.dto';
+import { JoinReservationDTO } from '../dto/create-joinReservation.dto';
 
 @Controller('offers')
 export class OffersController {
@@ -40,6 +41,17 @@ export class OffersController {
             const result = await this.offerService.createOffer(offert);
             
             res.json({"message": "Reservado"})
+        } catch (error) {
+            res.status(500).json({"error": "Hubo un error"})
+        }
+    }
+
+    @Post("invitation")
+    async joinReservationOffer(@Res() res:Response, @Body() joinReservation:JoinReservationDTO){
+        try {
+            console.log(joinReservation)
+            const result =  await this.offerService.joinReservation(joinReservation);
+            res.json({"message": "Se ha unido con exito a la reserva"})
         } catch (error) {
             res.status(500).json({"error": "Hubo un error"})
         }
