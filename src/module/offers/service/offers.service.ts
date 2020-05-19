@@ -1,19 +1,19 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Reserva } from 'src/entity/reserva.entity';
+import { Reserva } from '../../../entity/reserva.entity';
 import {
     Repository,
 
 } from 'typeorm';
-import { OfertaCubiculo } from 'src/entity/ofertaCubiculo.entity';
+import { OfertaCubiculo } from '../../../entity/ofertaCubiculo.entity';
 import { CreateOfferReservationDTO } from '../dto/create-offer.dto';
 import * as moment from 'moment';
 import { CreateOfferReponseDTO } from '../dto/create-offerResponse.dto';
-import { addPMorAM } from 'src/utils/algorithms';
+import { addPMorAM } from '../../../utils/algorithms';
 import { CreateOfferDetailDTO } from '../dto/create-offerDetail.dto';
 import { JoinReservationDTO } from '../dto/create-joinReservation.dto';
-import { UserManyReserva } from 'src/entity/userManyReservas.entity';
-import { User } from 'src/entity/user.entity';
+import { UserManyReserva } from '../../../entity/userManyReservas.entity';
+import { User } from '../../../entity/user.entity';
 @Injectable()
 export class OffersService {
 

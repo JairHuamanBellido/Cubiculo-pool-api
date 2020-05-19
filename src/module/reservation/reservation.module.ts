@@ -9,7 +9,7 @@ import { Repository } from 'typeorm';
 import { UserManyReserva } from '../../entity/userManyReservas.entity';
 import { UsersModule } from '../users/users.module';
 import { CronModule } from '../cron/cron.module';
-import { OfertaCubiculo } from 'src/entity/ofertaCubiculo.entity';
+import { OfertaCubiculo } from '../../entity/ofertaCubiculo.entity';
 import { OffersModule } from '../offers/offers.module';
 
 @Module({

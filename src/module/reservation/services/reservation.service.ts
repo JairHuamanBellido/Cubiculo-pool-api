@@ -13,7 +13,7 @@ import { UsersService } from '../../../module/users/services/users.service';
 import { TIMEZONE_PERU } from '../../../utils/timeZone';
 import { ReservaActivation } from '../dto/create-reservaActivation.dto';
 import { CronService } from '../../../module/cron/service/cron.service';
-import { OfertaCubiculo } from 'src/entity/ofertaCubiculo.entity';
+import { OfertaCubiculo } from '../../../entity/ofertaCubiculo.entity';
 
 @Injectable()
 export class ReservationService {
