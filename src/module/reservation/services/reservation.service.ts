@@ -156,7 +156,10 @@ export class ReservationService {
             { where: { user: user, reserva:reserva } },
         );
         
-        console.log(userManyReservasStatus);
+        
+        const offer =  await this.ofertaCubiculoRepository.find({where: {reserva:reserva}});
+        
+
         let reservationDetailDTO = new ReservaDetailDTO();
 
         reservationDetailDTO.cubiculoNombre = reserva.cubiculo.nombre;
@@ -171,8 +174,9 @@ export class ReservationService {
         reservationDetailDTO.sitiosDisponible = 6 - userManyReservas.length;
         reservationDetailDTO.sede = reserva.sede;
         reservationDetailDTO.participantes = [];
+        reservationDetailDTO.rol =  userManyReservasStatus[0].role;
         reservationDetailDTO.activate = userManyReservasStatus[0].activate;
-
+        reservationDetailDTO.offer =   offer;
         userManyReservas.forEach(e => {
             reservationDetailDTO.participantes.push({
                 codigo: e.user.codigo,

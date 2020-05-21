@@ -37,6 +37,12 @@ export class ReservaDetailDTO{
 
     @ApiProperty()
     activate:string;
+
+    @ApiProperty()
+    rol:string;
+
+    @ApiProperty()
+    offer:any;
     
     constructor(){}
 }
