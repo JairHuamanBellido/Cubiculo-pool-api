@@ -157,7 +157,7 @@ export class ReservationService {
         );
         
         
-        const offer =  await this.ofertaCubiculoRepository.find({where: {reserva:reserva}});
+        const offer =  await this.ofertaCubiculoRepository.find({where: {reserva:reserva, disponible :true}});
         
 
         let reservationDetailDTO = new ReservaDetailDTO();
@@ -176,7 +176,7 @@ export class ReservationService {
         reservationDetailDTO.participantes = [];
         reservationDetailDTO.rol =  userManyReservasStatus[0].role;
         reservationDetailDTO.activate = userManyReservasStatus[0].activate;
-        reservationDetailDTO.offer =   offer;
+        reservationDetailDTO.offer =    offer;
         userManyReservas.forEach(e => {
             reservationDetailDTO.participantes.push({
                 codigo: e.user.codigo,

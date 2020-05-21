@@ -1,10 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Reserva } from '../../../entity/reserva.entity';
-import {
-    Repository,
-
-} from 'typeorm';
+import { Repository } from 'typeorm';
 import { OfertaCubiculo } from '../../../entity/ofertaCubiculo.entity';
 import { CreateOfferReservationDTO } from '../dto/create-offer.dto';
 import * as moment from 'moment';
@@ -16,7 +13,6 @@ import { UserManyReserva } from '../../../entity/userManyReservas.entity';
 import { User } from '../../../entity/user.entity';
 @Injectable()
 export class OffersService {
-
     constructor(
         @InjectRepository(Reserva)
         private reservaRepository: Repository<Reserva>,
@@ -25,10 +21,10 @@ export class OffersService {
         private ofertaRepository: Repository<OfertaCubiculo>,
 
         @InjectRepository(User)
-        private userRepository:Repository<User>,
+        private userRepository: Repository<User>,
 
         @InjectRepository(UserManyReserva)
-        private userManyReservaRepository:Repository<UserManyReserva>
+        private userManyReservaRepository: Repository<UserManyReserva>,
     ) {}
 
     async createOffer(offer: CreateOfferReservationDTO) {
@@ -49,19 +45,24 @@ export class OffersService {
         return true;
     }
 
+    async findById(id: number) {
+        const offer = await this.ofertaRepository.findOne({
+            where: { id: id },
+            relations: ['reserva'],
+        });
 
-    async findById(id:number){
-        const offer =  await this.ofertaRepository.findOne({where: {id: id}, relations:['reserva']})
-        
         console.log(offer);
-        const reserva =  await this.reservaRepository.findOne({where:{id:offer.reserva.id}, relations: ['cubiculo']})
+        const reserva = await this.reservaRepository.findOne({
+            where: { id: offer.reserva.id },
+            relations: ['cubiculo'],
+        });
 
-        let offerDetail =  new CreateOfferDetailDTO();
-        offerDetail.appleTv  = offer.apple;
-        offerDetail.asientos =  offer.sitios;
-        offerDetail.pizarra =  offer.pizarra;
-        offerDetail.cubiculoNombre =  reserva.cubiculo.nombre
-    
+        let offerDetail = new CreateOfferDetailDTO();
+        offerDetail.appleTv = offer.apple;
+        offerDetail.asientos = offer.sitios;
+        offerDetail.pizarra = offer.pizarra;
+        offerDetail.cubiculoNombre = reserva.cubiculo.nombre;
+
         return offerDetail;
     }
 
@@ -97,38 +98,48 @@ export class OffersService {
         return result;
     }
 
-
     async joinReservation(joinReservation: JoinReservationDTO) {
-        
-        const offer = await this.ofertaRepository.findOne({where:{id: joinReservation.ofertaId}, relations: ['reserva']});
+        const offer = await this.ofertaRepository.findOne({
+            where: { id: joinReservation.ofertaId },
+            relations: ['reserva'],
+        });
 
         console.log(offer);
 
-        const student =  await this.userRepository.findOne({where: {codigo: joinReservation.codigo}})
+        const student = await this.userRepository.findOne({
+            where: { codigo: joinReservation.codigo },
+        });
 
-        const reserva = await this.reservaRepository.findOne({where: {id: offer.reserva.id}})
-       
-        const userManyReservas =  new UserManyReserva();
+        const reserva = await this.reservaRepository.findOne({
+            where: { id: offer.reserva.id },
+        });
 
+        const userManyReservas = new UserManyReserva();
 
-        userManyReservas.role ="Participante"
-        userManyReservas.user =  student;
+        userManyReservas.role = 'Participante';
+        userManyReservas.user = student;
         userManyReservas.reserva = reserva;
-        userManyReservas.activate =  "true";
+        userManyReservas.activate = 'true';
 
-        if(joinReservation.apple){
-            offer.apple =  false
+        if (joinReservation.apple) {
+            offer.apple = false;
         }
 
-        if(joinReservation.pizarra){
-            offer.pizarra =  false
+        if (joinReservation.pizarra) {
+            offer.pizarra = false;
         }
 
-        offer.sitios =  offer.sitios - 1;
+        offer.sitios = offer.sitios - 1;
 
-        await this.ofertaRepository.save(offer)
+        await this.ofertaRepository.save(offer);
         await this.userManyReservaRepository.save(userManyReservas);
     }
 
-    
+    async delete(id: number) {
+        const offer = await this.ofertaRepository.findOneOrFail({
+            where: { id: id },
+        });
+        offer.disponible = false;
+        await this.ofertaRepository.save(offer);
+    }
 }
