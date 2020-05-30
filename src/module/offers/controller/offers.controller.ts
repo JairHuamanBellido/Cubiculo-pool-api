@@ -36,6 +36,15 @@ export class OffersController {
             res.status(500).json({ error: 'Hubo un error' });
         }
     }
+    @Get(':id/reservation')
+    async findByIdByReservation(@Res() res:Response, @Param('id') id:number){
+        try {
+            const result =  await this.offerService.findByIdReservation(id);
+            res.json(result)
+        } catch (error) {
+            res.status(500).json({error: error})
+        }
+    }
     @Post()
     async makeOffer(
         @Res() res: Response,
@@ -62,6 +71,16 @@ export class OffersController {
             res.json({ message: 'Se ha unido con exito a la reserva' });
         } catch (error) {
             res.status(500).json({ error: 'Hubo un error' });
+        }
+    }
+
+    @Put(':id')
+    async updateOffer(@Res() res:Response, @Param('id') id:number, @Body() body:any){
+        try {
+            const reuslt =  await this.offerService.updateOffer(id,body);
+            res.json({message: "Oferta actualizada"})
+        } catch (error) {
+            res.status(500).json({error: error})
         }
     }
 

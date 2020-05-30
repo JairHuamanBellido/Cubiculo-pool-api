@@ -13,6 +13,8 @@ import { UserManyReserva } from '../../../entity/userManyReservas.entity';
 import { User } from '../../../entity/user.entity';
 @Injectable()
 export class OffersService {
+ 
+    
     constructor(
         @InjectRepository(Reserva)
         private reservaRepository: Repository<Reserva>,
@@ -44,7 +46,18 @@ export class OffersService {
 
         return true;
     }
+    async findByIdReservation(id: number) {
+        const offer =  await this.ofertaRepository.findOne({where: {id: id}, relations: ['reserva']})
 
+        
+        let createOffer = new CreateOfferReservationDTO()
+        createOffer.apple =  offer.apple;
+        createOffer.sitios  = offer.sitios;
+        createOffer.pizarra =  offer.pizarra
+        createOffer.reservaId =  offer.reserva.id
+
+        return await createOffer;
+    }
     async findById(id: number) {
         const offer = await this.ofertaRepository.findOne({
             where: { id: id },
@@ -64,6 +77,13 @@ export class OffersService {
         offerDetail.cubiculoNombre = reserva.cubiculo.nombre;
 
         return offerDetail;
+    }
+
+
+    async updateOffer(id:number,body: any) {
+        let offer =  await this.ofertaRepository.findOne({where:{ id: id}});
+        offer =  body;
+        await this.ofertaRepository.update(id,offer);
     }
 
     async getAllOffesAvailable() {
