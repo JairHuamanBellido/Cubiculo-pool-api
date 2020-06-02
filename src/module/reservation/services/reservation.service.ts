@@ -29,7 +29,7 @@ export class ReservationService {
 
         @InjectRepository(UserManyReserva)
         private userManyReservaRepository: Repository<UserManyReserva>,
-        
+
         @InjectRepository(OfertaCubiculo)
         private ofertaCubiculoRepository: Repository<OfertaCubiculo>,
 
@@ -57,10 +57,7 @@ export class ReservationService {
 
             const reserva = new Reserva();
 
-            const day =
-                moment(UTC_StartTime).get('day') === TIMEZONE_PERU.get('day')
-                    ? 'Hoy'
-                    : 'Mañana';
+            const day = moment(UTC_StartTime).get('day') === TIMEZONE_PERU.get('day') ? 'Hoy' : 'Mañana';
 
             const cubiculoTarget = await this.cubiculoRepository.findOne({
                 id: _reserva.cubiculo_id,
@@ -74,19 +71,9 @@ export class ReservationService {
                 codigo: _reserva.codigo_dos,
             });
 
-            const hoursAvailableUser2 = await this.userService.findHoursAvailablePerDay(
-                usuario_owner_2.codigo,
-                day,
-            );
+            const hoursAvailableUser2 = await this.userService.findHoursAvailablePerDay(usuario_owner_2.codigo, day);
 
-            if (
-                hoursAvailableUser2 == 0 ||
-                !(
-                    hoursAvailableUser2 >=
-                    moment(UTC_EndTime).get('hour') -
-                        moment(UTC_StartTime).get('hour')
-                )
-            ) {
+            if (hoursAvailableUser2 == 0 || !(hoursAvailableUser2 >= moment(UTC_EndTime).get('hour') - moment(UTC_StartTime).get('hour'))) {
                 console.log('error');
                 return ErrorEvent;
             }
@@ -117,11 +104,7 @@ export class ReservationService {
             many_to_many_2.activate = 'false';
             many_to_many_1.activate = 'false';
 
-            this.cronService.addActivationEnableJob(
-                reserva.id,
-                _reserva.fecha,
-                _reserva.hora_inicio,
-            );
+            this.cronService.addActivationEnableJob(reserva.id, _reserva.fecha, _reserva.hora_inicio);
 
             // const cronJob = await this.activationEnableJob(
             //     reserva.id,
@@ -152,31 +135,25 @@ export class ReservationService {
             where: { reserva: reserva },
             relations: ['user', 'reserva'],
         });
-        const userManyReservasStatus = await this.userManyReservaRepository.find(
-            { where: { user: user, reserva:reserva } },
-        );
-        
-        
-        const offer =  await this.ofertaCubiculoRepository.find({where: {reserva:reserva, disponible :true}});
-        
+        const userManyReservasStatus = await this.userManyReservaRepository.find({ where: { user: user, reserva: reserva } });
+
+        const offer = await this.ofertaCubiculoRepository.find({
+            where: { reserva: reserva, disponible: true },
+        });
 
         let reservationDetailDTO = new ReservaDetailDTO();
 
         reservationDetailDTO.cubiculoNombre = reserva.cubiculo.nombre;
-        reservationDetailDTO.horaInicio = addPMorAM(
-            moment(reserva.hora_inicio).get('hour'),
-        );
-        reservationDetailDTO.horaFin = addPMorAM(
-            moment(reserva.hora_fin).get('hour'),
-        );
+        reservationDetailDTO.horaInicio = addPMorAM(moment(reserva.hora_inicio).get('hour'));
+        reservationDetailDTO.horaFin = addPMorAM(moment(reserva.hora_fin).get('hour'));
         reservationDetailDTO.tema = reserva.theme;
         reservationDetailDTO.estado = reserva.estado;
         reservationDetailDTO.sitiosDisponible = 6 - userManyReservas.length;
         reservationDetailDTO.sede = reserva.sede;
         reservationDetailDTO.participantes = [];
-        reservationDetailDTO.rol =  userManyReservasStatus[0].role;
+        reservationDetailDTO.rol = userManyReservasStatus[0].role;
         reservationDetailDTO.activate = userManyReservasStatus[0].activate;
-        reservationDetailDTO.offer =    offer;
+        reservationDetailDTO.offer = offer;
         userManyReservas.forEach(e => {
             reservationDetailDTO.participantes.push({
                 codigo: e.user.codigo,
@@ -187,10 +164,8 @@ export class ReservationService {
     }
 
     async activateReservation(reservaActivate: ReservaActivation) {
-
-        
-        console.log("Reserva",reservaActivate);
-        console.log("Reserva,id",reservaActivate.reservaId);
+        console.log('Reserva', reservaActivate);
+        console.log('Reserva,id', reservaActivate.reservaId);
         const user = await this.userRepository.findOne({
             where: { codigo: reservaActivate.codigo },
         });
@@ -225,18 +200,24 @@ export class ReservationService {
             where: { reserva: reserva },
         });
 
-        const ofertaCubiculo =  await this.ofertaCubiculoRepository.findOne({where: {reserva:  reserva}})
-        this.userManyReservaRepository.remove(usermanyreservas).then(() => {
-            this.reservaRepository.remove(reserva);
+        const ofertaCubiculo = await this.ofertaCubiculoRepository.findOne({
+            where: { reserva: reserva },
         });
 
-        await this.ofertaCubiculoRepository.delete(ofertaCubiculo).then(async()=>{
-            await this.userManyReservaRepository.delete(usermanyreservas[0])
-            await this.userManyReservaRepository.delete(usermanyreservas[1])
-        }).then( async()=>{
-
-            await this.reservaRepository.delete(reserva);
-        })
+        if (!ofertaCubiculo) {
+            this.userManyReservaRepository.remove(usermanyreservas).then(() => {
+                this.reservaRepository.delete(reserva);
+            });
+        } else {
+            await this.ofertaCubiculoRepository
+                .delete(ofertaCubiculo)
+                .then(async () => {
+                    await this.userManyReservaRepository.remove(usermanyreservas);
+                })
+                .then(async () => {
+                    await this.reservaRepository.delete(reserva);
+                });
+        }
 
         return { message: 'Se ha removido con exito la reserva' };
     }

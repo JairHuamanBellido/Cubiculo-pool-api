@@ -26,11 +26,7 @@ export class ReservationController {
         @Res() res: Response,
         @Body() reserva: CreateReservaDTO,
     ) {
-        Logger.log(
-            `${reserva.codigo_uno} esta haciendo una reserva`,
-            'Reservation Activity',
-        );
-        Logger.log(reserva, 'Reservation body');
+
         try {
             const response = await this.reservarService.create(reserva);
             res.json(response);
@@ -56,7 +52,6 @@ export class ReservationController {
         @Param('code') code: string,
     ) {
         const result = await this.reservarService.findById(parseInt(id), code);
-
         res.json(result);
     }
 
