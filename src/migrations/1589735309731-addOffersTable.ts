@@ -5,7 +5,7 @@ export class addOffersTable1589735309731 implements MigrationInterface {
 
     public async up(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.query(`CREATE TABLE "oferta_cubiculo" ("id" SERIAL NOT NULL, "apple" boolean NOT NULL, "pizarra" boolean NOT NULL, "sitios" integer NOT NULL, "reservaId" integer, CONSTRAINT "PK_95c9318e684ed1cac36934c2cef" PRIMARY KEY ("id"))`, undefined);
-        await queryRunner.query(`ALTER TABLE "user_many_reserva" ALTER COLUMN "activate" SET NULL`, undefined);
+        await queryRunner.query(`ALTER TABLE "user_many_reserva" ALTER COLUMN "activate" NULL`, undefined);
         await queryRunner.query(`ALTER TABLE "oferta_cubiculo" ADD CONSTRAINT "FK_9385c18b216cf9b0673062fc7e4" FOREIGN KEY ("reservaId") REFERENCES "reserva"("id") ON DELETE NO ACTION ON UPDATE NO ACTION`, undefined);
     }
 
