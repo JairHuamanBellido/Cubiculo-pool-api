@@ -6,4 +6,5 @@ export class CreateOfferReponseDTO{
     pizarra;
     asientos;
     tema;
+    offerId;
 }

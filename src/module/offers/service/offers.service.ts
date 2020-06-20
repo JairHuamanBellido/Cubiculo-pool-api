@@ -51,6 +51,7 @@ export class OffersService {
 
         
         let createOffer = new CreateOfferReservationDTO()
+        createOffer.id =  offer.id;
         createOffer.apple =  offer.apple;
         createOffer.sitios  = offer.sitios;
         createOffer.pizarra =  offer.pizarra
@@ -110,6 +111,7 @@ export class OffersService {
                         ),
                         horaFin: addPMorAM(moment(e.hora_fin).get('hours')),
                         tema: e.theme,
+                        offerId: offer.id
                     });
                 }
             });
