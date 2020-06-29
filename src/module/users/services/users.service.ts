@@ -71,7 +71,7 @@ export class UsersService {
         // Encontrar las reservas del usuario
         const userManyReserva = await this.userManyReservaRepository.find(
             {
-                where: { user: user, role: "Admin" },
+                where: { user: user },
                 relations: ["reserva"]
             })
 

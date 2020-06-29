@@ -17,12 +17,10 @@ export class AuthController {
     @Post()
     async authenication(@Res() res:Response, @Body() credentials:CreateAuthRequestDTO){
 
-        Logger.log(`${credentials.username} esta intentando loguearse`, "Authentication Activity")
         try {
             const foundUser = await this.authService.authenticate(credentials);
             res.json(foundUser);
 
-            Logger.log(`${credentials} se ha autenticado correctamente`,'Authentication Acitivty')
             
         } catch (error) {
             Logger.error(`${credentials} no ingresó sus credenciales correctamente`)

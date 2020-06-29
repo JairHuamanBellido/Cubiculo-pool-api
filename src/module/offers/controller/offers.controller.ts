@@ -1,17 +1,9 @@
-import {
-    Controller,
-    Post,
-    Res,
-    Body,
-    Get,
-    Param,
-    Put,
-    Delete,
-} from '@nestjs/common';
+import { Controller, Post, Res, Body, Get, Param, Put, Delete } from '@nestjs/common';
 import { OffersService } from '../service/offers.service';
 import { Response } from 'express';
 import { CreateOfferReservationDTO } from '../dto/create-offer.dto';
 import { JoinReservationDTO } from '../dto/create-joinReservation.dto';
+import { off } from 'process';
 
 @Controller('offers')
 export class OffersController {
@@ -37,19 +29,16 @@ export class OffersController {
         }
     }
     @Get(':id/reservation')
-    async findByIdByReservation(@Res() res:Response, @Param('id') id:number){
+    async findByIdByReservation(@Res() res: Response, @Param('id') id: number) {
         try {
-            const result =  await this.offerService.findByIdReservation(id);
-            res.json(result)
+            const result = await this.offerService.findByIdReservation(id);
+            res.json(result);
         } catch (error) {
-            res.status(500).json({error: error})
+            res.status(500).json({ error: error });
         }
     }
     @Post()
-    async makeOffer(
-        @Res() res: Response,
-        @Body() offert: CreateOfferReservationDTO,
-    ) {
+    async makeOffer(@Res() res: Response, @Body() offert: CreateOfferReservationDTO) {
         try {
             const result = await this.offerService.createOffer(offert);
 
@@ -60,14 +49,9 @@ export class OffersController {
     }
 
     @Post('invitation')
-    async joinReservationOffer(
-        @Res() res: Response,
-        @Body() joinReservation: JoinReservationDTO,
-    ) {
+    async joinReservationOffer(@Res() res: Response, @Body() joinReservation: JoinReservationDTO) {
         try {
-            const result = await this.offerService.joinReservation(
-                joinReservation,
-            );
+            const result = await this.offerService.joinReservation(joinReservation);
             res.json({ message: 'Se ha unido con exito a la reserva' });
         } catch (error) {
             res.status(500).json({ error: 'Hubo un error' });
@@ -75,12 +59,12 @@ export class OffersController {
     }
 
     @Put(':id')
-    async updateOffer(@Res() res:Response, @Param('id') id:number, @Body() body:any){
+    async updateOffer(@Res() res: Response, @Param('id') id: number, @Body() body: any) {
         try {
-            const reuslt =  await this.offerService.updateOffer(id,body);
-            res.json({message: "Oferta actualizada"})
+            const reuslt = await this.offerService.updateOffer(id, body);
+            res.json({ message: 'Oferta actualizada' });
         } catch (error) {
-            res.status(500).json({error: error})
+            res.status(500).json({ error: error });
         }
     }
 
