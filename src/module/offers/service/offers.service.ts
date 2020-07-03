@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Reserva } from '../../../entity/reserva.entity';
-import { Repository } from 'typeorm';
+import { Repository, MoreThan } from 'typeorm';
 import { OfertaCubiculo } from '../../../entity/ofertaCubiculo.entity';
 import { CreateOfferReservationDTO } from '../dto/create-offer.dto';
 import * as moment from 'moment';
@@ -89,9 +89,13 @@ export class OffersService {
 
     async getAllOffesAvailable() {
         const offers = await this.ofertaRepository.find({
-            where: { disponible: true },
+            where: { disponible: true, sitios: MoreThan(0) },
             relations: ['reserva'],
         });
+
+        if( offers.length < 1){
+            return []
+        }
         const reserva = await this.reservaRepository.find({
             where: { estado: 'Activado' },
             relations: ['cubiculo'],

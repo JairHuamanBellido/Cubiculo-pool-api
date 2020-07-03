@@ -89,7 +89,7 @@ export class ReservationService {
             many_to_many_2.user = usuario_owner_2;
 
             reserva.cubiculo = cubiculoTarget;
-            reserva.estado = 'Reservado';
+            reserva.estado = 'PorActivar';
             reserva.fecha = new Date(UTC_Date);
             reserva.hora_fin = new Date(UTC_EndTime);
             reserva.hora_inicio = new Date(UTC_StartTime);
